@@ -1,5 +1,9 @@
 // Import necessary utilities and interfaces
 import "../utils/polyfills";
+import { setCryptoImplementation } from "@reclaimprotocol/tls";
+import { webcryptoCrypto } from "@reclaimprotocol/tls/webcrypto";
+setCryptoImplementation(webcryptoCrypto);
+
 import { MESSAGE_ACTIONS, MESSAGE_SOURCES, RECLAIM_SESSION_STATUS } from "../utils/constants";
 import { createClaimOnAttestor } from "@reclaimprotocol/attestor-core";
 // Import our specialized WebSocket implementation for offscreen document
@@ -140,8 +144,13 @@ class OffscreenProofGenerator {
               proof: proof,
             });
           } catch (error) {
+            const errMsg =
+              error?.message ||
+              (typeof error === "string" ? error : JSON.stringify(error)) ||
+              "Unknown error in proof generation";
+            console.error("[OFFSCREEN] Proof generation error:", error);
             offscreenLogger.error({
-              message: "[OFFSCREEN] Error generating proof: " + error.message,
+              message: "[OFFSCREEN] Error generating proof: " + errMsg,
               logLevel: LOG_LEVEL.ERROR,
               type: LOG_TYPES.OFFSCREEN,
               eventType: EVENT_TYPES.PROOF_GENERATION_FAILED,
@@ -151,7 +160,7 @@ class OffscreenProofGenerator {
               source: MESSAGE_SOURCES.OFFSCREEN,
               target: MESSAGE_SOURCES.BACKGROUND,
               success: false,
-              error: error.message || "Unknown error in proof generation",
+              error: errMsg,
             });
           }
         })();
@@ -261,13 +270,22 @@ class OffscreenProofGenerator {
       await updateSessionStatus(sessionId, RECLAIM_SESSION_STATUS.PROOF_GENERATION_SUCCESS);
       return result;
     } catch (error) {
+      const errMsg =
+        error?.message ||
+        (typeof error === "string" ? error : JSON.stringify(error)) ||
+        "Unknown error";
+      console.error("[OFFSCREEN] generateProof error:", error);
       offscreenLogger.error({
-        message: "[OFFSCREEN] Error generating proof: " + error?.message || "Unknown error",
+        message: "[OFFSCREEN] Error generating proof: " + errMsg,
         logLevel: LOG_LEVEL.ERROR,
         type: LOG_TYPES.OFFSCREEN,
         eventType: EVENT_TYPES.PROOF_GENERATION_FAILED,
       });
-      await updateSessionStatus(sessionId, RECLAIM_SESSION_STATUS.PROOF_GENERATION_FAILED);
+      try {
+        await updateSessionStatus(sessionId, RECLAIM_SESSION_STATUS.PROOF_GENERATION_FAILED);
+      } catch (e) {
+        console.error("[OFFSCREEN] Failed to update session status:", e);
+      }
       throw error;
     }
   }

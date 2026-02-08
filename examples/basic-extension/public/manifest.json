@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Basic Reclaim Demo Extension",
-  "description": "A basic Reclaim Demo extension",
+  "name": "tee-tls",
+  "description": "TEE-TLS Browser Extension",
   "version": "1.0.0",
   "action": { "default_title": "Reclaim", "default_popup": "popup.html" },
   "background": {

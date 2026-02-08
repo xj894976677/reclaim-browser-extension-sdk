@@ -1,74 +1,80 @@
 /**
  * Mock implementation of re2 native module for browser environments
- * This provides a JavaScript fallback using the standard RegExp
+ * This provides a JavaScript fallback using the standard RegExp.
+ *
+ * attestor-core calls RE2 both ways:
+ *   - RE2(pattern, 'sgiu')        ← without new, flags as string
+ *   - new RE2(pattern, 'sgiu')    ← with new, flags as string
  */
 
-class RE2 {
-  constructor(pattern, options) {
-    console.warn("Using RE2 mock in browser environment - falling back to standard RegExp");
-    // Convert RE2 options to RegExp options
-    let flags = "";
-    if (options) {
-      if (options.ignoreCase) flags += "i";
-      if (options.multiline) flags += "m";
-      if (options.global) flags += "g";
-    }
-
-    // Store the pattern for later use
-    this.pattern = pattern;
-
-    // Create a standard RegExp as fallback
-    try {
-      this.regexp = new RegExp(pattern, flags);
-    } catch (e) {
-      console.error("Failed to create RegExp from pattern:", pattern);
-      this.regexp = new RegExp(".*"); // Match anything as fallback
-    }
+function RE2(pattern, flags) {
+  // Support being called with or without `new`
+  if (!(this instanceof RE2)) {
+    return new RE2(pattern, flags);
   }
 
-  // Basic methods that re2 provides
-  test(string) {
-    return this.regexp.test(string);
+  // flags can be a string like 'sgiu' — pass directly to RegExp
+  // RegExp silently ignores the 's' (dotAll) flag in older engines,
+  // but modern browsers support it fine.
+  if (typeof flags === "object" && flags !== null) {
+    // Legacy object form: {ignoreCase, multiline, global}
+    let f = "";
+    if (flags.ignoreCase) f += "i";
+    if (flags.multiline) f += "m";
+    if (flags.global) f += "g";
+    flags = f;
   }
 
-  exec(string) {
-    return this.regexp.exec(string);
+  this.pattern = pattern;
+  this.flags = flags || "";
+
+  try {
+    this.regexp = new RegExp(pattern, this.flags);
+  } catch (e) {
+    console.error("RE2 mock: failed to create RegExp from pattern:", pattern, e);
+    this.regexp = new RegExp(".*");
   }
 
-  match(string) {
-    return string.match(this.regexp);
-  }
-
-  replace(string, replacement) {
-    return string.replace(this.regexp, replacement);
-  }
-
-  search(string) {
-    return string.search(this.regexp);
-  }
-
-  // For getting named capture groups
-  _getNamedCaptures(match, string) {
-    if (!match) return null;
-
-    // Extract named capture groups if available
-    const groupNames = this.pattern.match(/\(\?<([^>]+)>/g);
-    if (!groupNames) return match.groups || null;
-
-    const groups = match.groups || {};
-    groupNames.forEach((group, index) => {
-      const name = group.replace(/\(\?<([^>]+)>.*/, "$1");
-      groups[name] = match[index + 1];
-    });
-
-    return groups;
-  }
+  // Copy RegExp-like properties
+  this.source = this.regexp.source;
+  this.global = this.regexp.global;
+  this.ignoreCase = this.regexp.ignoreCase;
+  this.multiline = this.regexp.multiline;
+  this.lastIndex = 0;
 }
 
-// Export the RE2 class with the same interface as the native module
+RE2.prototype.test = function (string) {
+  this.regexp.lastIndex = this.lastIndex;
+  var result = this.regexp.test(string);
+  this.lastIndex = this.regexp.lastIndex;
+  return result;
+};
+
+RE2.prototype.exec = function (string) {
+  this.regexp.lastIndex = this.lastIndex;
+  var result = this.regexp.exec(string);
+  this.lastIndex = this.regexp.lastIndex;
+  return result;
+};
+
+RE2.prototype.match = function (string) {
+  return string.match(this.regexp);
+};
+
+RE2.prototype.replace = function (string, replacement) {
+  return string.replace(this.regexp, replacement);
+};
+
+RE2.prototype.search = function (string) {
+  return string.search(this.regexp);
+};
+
+RE2.prototype.toString = function () {
+  return this.regexp.toString();
+};
+
 module.exports = RE2;
 
-// Copy static properties
 module.exports.ANCHOR_BOTH = 0;
 module.exports.ANCHOR_END = 1;
 module.exports.ANCHOR_NONE = 2;

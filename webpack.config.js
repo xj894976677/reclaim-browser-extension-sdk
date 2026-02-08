@@ -67,7 +67,7 @@ const commonResolve = {
   alias: {
     ...alias,
     koffi: false,
-    re2: false,
+    re2: path.resolve(__dirname, "src/utils/mocks/re2-mock.js"),
     worker_threads: path.resolve(__dirname, "src/utils/mocks/worker-threads-mock.js"),
     "node:url": require.resolve("url/"),
     "react-native-tcp-socket": false,
@@ -98,7 +98,7 @@ const commonResolve = {
     worker_threads: false,
     readline: false,
     koffi: false,
-    re2: false,
+    re2: path.resolve(__dirname, "src/utils/mocks/re2-mock.js"),
   },
 };
 

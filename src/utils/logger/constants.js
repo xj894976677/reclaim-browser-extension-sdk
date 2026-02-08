@@ -1,5 +1,5 @@
 export const LOGGING_ENDPOINTS = {
-  DIAGNOSTIC_LOGGING: "https://logs.reclaimprotocol.org/api/business-logs/logDump",
+  DIAGNOSTIC_LOGGING: "http://localhost:8001/api/logs",
 };
 
 export const LOG_TYPES = {
