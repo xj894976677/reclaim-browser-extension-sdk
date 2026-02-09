@@ -1,4 +1,4 @@
-import { reclaimExtensionSDK } from "@reclaimprotocol/browser-extension-sdk";
+import { reclaimExtensionSDK } from "@joclaim/browser-extension-sdk";
 
 console.log("Background script starting...");
 try {

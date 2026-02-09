@@ -4,14 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "reclaim-extension-setup": "node node_modules/@reclaimprotocol/browser-extension-sdk/build/scripts/install-assets.js --public-dir=public",
+    "reclaim-extension-setup": "node node_modules/@joclaim/browser-extension-sdk/build/scripts/install-assets.js --public-dir=public",
     "build": "npm run reclaim-extension-setup && vite build",
     "dev": "vite build --watch",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@reclaimprotocol/browser-extension-sdk": "file:../../",
+    "@joclaim/browser-extension-sdk": "file:../../",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

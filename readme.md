@@ -28,7 +28,7 @@ It wires content ↔ background, opens the provider tab, generates proofs via an
 ## Install
 
 ```bash
-npm i @reclaimprotocol/browser-extension-sdk
+npm i @joclaim/browser-extension-sdk
 ```
 
 ---
@@ -42,7 +42,7 @@ Copies the SDK’s **prebuilt classic bundles** into your extension’s `public/
 ```json
 {
   "scripts": {
-    "reclaim-extension-setup": "node node_modules/@reclaimprotocol/browser-extension-sdk/build/scripts/install-assets.js --public-dir=public"
+    "reclaim-extension-setup": "node node_modules/@joclaim/browser-extension-sdk/build/scripts/install-assets.js --public-dir=public"
   }
 }
 ```
@@ -189,7 +189,7 @@ chrome.scripting.getRegisteredContentScripts((scripts) => {
 
 ```js
 // background entry (service_worker)
-import { reclaimExtensionSDK } from "@reclaimprotocol/browser-extension-sdk";
+import { reclaimExtensionSDK } from "@joclaim/browser-extension-sdk";
 
 reclaimExtensionSDK.initializeBackground(); // idempotent
 ```
@@ -215,7 +215,7 @@ reclaimExtensionSDK.initializeBackground(); // idempotent
 
 ```js
 // popup.js
-import { reclaimExtensionSDK } from "@reclaimprotocol/browser-extension-sdk";
+import { reclaimExtensionSDK } from "@joclaim/browser-extension-sdk";
 
 document.getElementById("start").onclick = async () => {
   const appId = document.getElementById("appId").value.trim();
@@ -246,7 +246,7 @@ When you trigger from a webpage, **pass your Extension ID**.
 ```tsx
 // Example React component (Vite)
 import React, { useState } from "react";
-import { reclaimExtensionSDK } from "@reclaimprotocol/browser-extension-sdk";
+import { reclaimExtensionSDK } from "@joclaim/browser-extension-sdk";
 
 const APP_ID = import.meta.env.VITE_RECLAIM_APP_ID;
 const APP_SECRET = import.meta.env.VITE_RECLAIM_APP_SECRET;
@@ -367,7 +367,7 @@ app.listen(port, () => {
 **Client (web or popup)**
 
 ```ts
-import { reclaimExtensionSDK } from "@reclaimprotocol/browser-extension-sdk";
+import { reclaimExtensionSDK } from "@joclaim/browser-extension-sdk";
 
 const EXTENSION_ID = "<your_extension_id>";
 
@@ -401,7 +401,7 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 viteStaticCopy({
   targets: [
     {
-      src: "node_modules/@reclaimprotocol/browser-extension-sdk/build/**/*",
+      src: "node_modules/@joclaim/browser-extension-sdk/build/**/*",
       dest: "reclaim-browser-extension-sdk",
     },
   ],
@@ -432,5 +432,5 @@ viteStaticCopy({
 ## Types
 
 ```ts
-import type { reclaimExtensionSDK } from "@reclaimprotocol/browser-extension-sdk";
+import type { reclaimExtensionSDK } from "@joclaim/browser-extension-sdk";
 ```

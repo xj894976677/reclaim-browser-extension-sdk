@@ -346,6 +346,11 @@ export const createClaimObject = async (
     params.additionalClientOptions = providerData.additionalClientOptions;
   }
 
+  // Pass writeRedactionMode to attestor (zk or key-update)
+  if (providerData.writeRedactionMode) {
+    params.writeRedactionMode = providerData.writeRedactionMode;
+  }
+
   let ownerPrivateKey;
   try {
     ownerPrivateKey = await getPrivateKeyFromOffscreen(sessionId, providerId, bgLogger);
