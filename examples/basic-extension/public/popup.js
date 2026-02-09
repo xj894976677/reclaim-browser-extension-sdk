@@ -24,7 +24,7 @@ document.getElementById("startBtn").addEventListener("click", async () => {
     }
 
     request = await reclaimExtensionSDK.init(appId, appSecret, providerId, {
-      extensionID: "giclhcgjpilblajdkdkdboobjpaoanlk",
+      extensionID: "elmologhmcjpdalmdhlopllajilfodef",
     });
 
     console.log("[popup] request", request);

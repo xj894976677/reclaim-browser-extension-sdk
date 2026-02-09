@@ -383,7 +383,7 @@ export const createClaimObject = async (
     secretParams,
     ownerPrivateKey: ownerPrivateKey,
     client: {
-      url: "wss://attestor.reclaimprotocol.org/ws",
+      url: "ws://localhost:8001/ws",
     },
   };
 
