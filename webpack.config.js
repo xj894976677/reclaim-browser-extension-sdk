@@ -41,7 +41,12 @@ const commonRules = [
   {
     test: /\.(ts|tsx)$/,
     exclude: /node_modules/,
-    use: [{ loader: require.resolve("ts-loader"), options: { transpileOnly: isDevelopment } }],
+    use: [
+      {
+        loader: require.resolve("ts-loader"),
+        options: { transpileOnly: true, configFile: path.resolve(__dirname, "tsconfig.json") },
+      },
+    ],
   },
   {
     test: /\.(js|jsx)$/,
@@ -66,21 +71,41 @@ const commonRules = [
 const commonResolve = {
   alias: {
     ...alias,
+    // Fix tsyringe ESM5 module compatibility issue - use CommonJS version
+    tsyringe: path.resolve(__dirname, "../attestor-core/node_modules/tsyringe/dist/cjs/index.js"),
     koffi: false,
-    re2: false,
+    // Use attestor-core's browser fallback for re2 (Node.js native module)
+    re2: path.resolve(__dirname, "../attestor-core/src/scripts/fallbacks/re2.ts"),
     worker_threads: path.resolve(__dirname, "src/utils/mocks/worker-threads-mock.js"),
     "node:url": require.resolve("url/"),
     "react-native-tcp-socket": false,
     "process/browser": require.resolve("process/browser.js"),
+    "process/browser.js": require.resolve("process/browser.js"),
+    snarkjs: false,
     canvas: false,
     jsdom: path.resolve(__dirname, "src/utils/mocks/jsdom-mock.js"),
+    // Ensure all modules share the same @joclaim/tls singleton
+    "@joclaim/tls$": path.resolve(__dirname, "../tls/lib/index.js"),
+    "@joclaim/tls/webcrypto": path.resolve(__dirname, "src/utils/shims/tls-webcrypto-shim.js"),
+    // Also alias the direct file path for local linked TLS library
+    [path.resolve(__dirname, "../tls/lib/crypto/webcrypto.js")]: path.resolve(
+      __dirname,
+      "src/utils/shims/tls-webcrypto-shim.js",
+    ),
     ws: path.resolve(__dirname, "src/utils/websocket-polyfill.js"),
+    // Use local attestor-core source directly (not lib/)
+    "@joclaim/attestor-core": path.resolve(
+      __dirname,
+      "../attestor-core/src/external-rpc/setup-browser.ts",
+    ),
+    "#src/*": path.resolve(__dirname, "../attestor-core/src/*"),
+    "src/utils/generics.ts": path.resolve(__dirname, "../attestor-core/src/utils/generics.ts"),
   },
   extensions: fileExtensions.map((e) => "." + e).concat([".js", ".jsx", ".ts", ".tsx", ".css"]),
   fallback: {
     stream: require.resolve("stream-browserify"),
     buffer: require.resolve("buffer/"),
-    crypto: require.resolve("crypto-browserify"),
+    crypto: path.resolve(__dirname, "src/utils/shims/crypto-shim.js"),
     https: require.resolve("https-browserify"),
     http: require.resolve("stream-http"),
     path: require.resolve("path-browserify"),

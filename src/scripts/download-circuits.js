@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-const REPO = "reclaimprotocol/zk-symmetric-crypto";
+const REPO = "xj894976677/zk-symmetric-crypto";
 const TARGET_DIR = path.join(process.cwd(), "public", "browser-rpc", "resources");
 const TEMP_DIR = path.join(process.cwd(), "zk-resources");
 

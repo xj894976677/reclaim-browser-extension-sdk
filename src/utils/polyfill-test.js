@@ -1,10 +1,10 @@
 // Test file to verify polyfill functionality
 import "./polyfills";
-import { createClaimOnAttestor } from "@reclaimprotocol/attestor-core";
+import { createClaimOnAttestor } from "@joclaim/attestor-core";
 import { debugLogger, DebugLogType } from "./logger";
 
 export const testPolyfills = () => {
-  debugLogger.info(DebugLogType.POLYFILLS, "Testing polyfills for @reclaimprotocol/attestor-core");
+  debugLogger.info(DebugLogType.POLYFILLS, "Testing polyfills for @joclaim/attestor-core");
 
   // Verify Buffer is available
   debugLogger.info(DebugLogType.POLYFILLS, "Buffer available:", typeof Buffer !== "undefined");

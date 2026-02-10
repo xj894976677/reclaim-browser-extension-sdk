@@ -207,10 +207,11 @@ try {
           data: {},
         },
         (resp) => {
+          console.log("[DIAG] CHECK_IF_MANAGED_TAB response:", resp, "url:", window.location.href);
           // If this tab is managed, set the flag and inject immediately to catch login-time requests
           if (resp?.success && resp.isManaged) {
             shouldInitialize = true;
-
+            console.log("[DIAG] Managed tab detected, injecting interceptor...");
             injectNetworkInterceptor(); // safe: guarded by interceptorInjected
             // Optional: if you also want the extra script:
             injectDynamicInjectionScript();
@@ -234,6 +235,7 @@ try {
       const { action, data } = message;
 
       if (action === MESSAGE_ACTIONS.SHOULD_INITIALIZE) {
+        console.log("[DIAG] SHOULD_INITIALIZE received:", data, "url:", window.location.href);
         shouldInitialize = data.shouldInitialize;
 
         if (shouldInitialize) {
@@ -328,6 +330,12 @@ class ReclaimContentScript {
   }
 
   init() {
+    console.log(
+      "[DIAG] ReclaimContentScript.init() called, shouldInitialize:",
+      shouldInitialize,
+      "url:",
+      window.location.href,
+    );
     // Listen for messages from the web page
     // window.addEventListener("message", this.handleWindowMessage.bind(this));
 
@@ -364,6 +372,12 @@ class ReclaimContentScript {
             data: { url: window.location.href },
           },
           (response) => {
+            console.log(
+              "[DIAG] REQUEST_PROVIDER_DATA response:",
+              response?.success,
+              "providerData:",
+              !!response?.data?.providerData,
+            );
             if (response.success) {
               this.providerData = response.data.providerData;
               this.parameters = response.data.parameters;
@@ -807,7 +821,11 @@ class ReclaimContentScript {
 
     if (action === MESSAGE_ACTIONS.INTERCEPTED_REQUEST_AND_RESPONSE && data) {
       // Store the intercepted response
-
+      console.log(
+        "[DIAG] Intercepted request:",
+        data.request?.method,
+        data.request?.url?.substring(0, 100),
+      );
       const key = `${data.request.method}_${data.request.url}_${data.timestamp || Date.now()}`;
       this.interceptedRequestResponses.set(key, data);
 
@@ -1091,6 +1109,14 @@ class ReclaimContentScript {
 
   // Start filtering intercepted network requests
   startNetworkFiltering() {
+    console.log(
+      "[DIAG] startNetworkFiltering called, providerData:",
+      !!this.providerData,
+      "injectionType:",
+      this.providerData?.injectionType,
+      "interceptedCount:",
+      this.interceptedRequestResponses?.size,
+    );
     if (!this.providerData) {
       return;
     }
@@ -1154,6 +1180,12 @@ class ReclaimContentScript {
     if (!this.providerData || !this.providerData.requestData) {
       return;
     }
+    console.log(
+      "[DIAG] filterInterceptedRequests: total intercepted:",
+      this.interceptedRequestResponses.size,
+      "already filtered:",
+      this.filteredRequests.length,
+    );
 
     // For each linked request/response pair
     for (const [key, combinedData] of this.interceptedRequestResponses.entries()) {

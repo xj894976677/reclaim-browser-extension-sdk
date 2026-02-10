@@ -1,7 +1,16 @@
 // Import necessary utilities and interfaces
 import "../utils/polyfills";
 import { MESSAGE_ACTIONS, MESSAGE_SOURCES, RECLAIM_SESSION_STATUS } from "../utils/constants";
-import { createClaimOnAttestor } from "@reclaimprotocol/attestor-core";
+// attestor-core is loaded as a pre-built browser bundle via offscreen.html
+// (snarkjs.min.js → window.snarkjs, attestor-browser.min.mjs → window.ReclaimAttestorCore)
+// This avoids webpack bundling snarkjs which causes CSP/Worker issues in Chrome extensions.
+// Access lazily to ensure the module script has executed before use.
+function getCreateClaimOnAttestor() {
+  if (!window.ReclaimAttestorCore?.createClaimOnAttestor) {
+    throw new Error("ReclaimAttestorCore not loaded - check offscreen.html script order");
+  }
+  return window.ReclaimAttestorCore.createClaimOnAttestor;
+}
 // Import our specialized WebSocket implementation for offscreen document
 import { WebSocket } from "../utils/offscreen-websocket";
 import { updateSessionStatus } from "../utils/fetch-calls";
@@ -26,6 +35,10 @@ if (typeof WebAssembly === "undefined") {
 if (typeof global !== "undefined") {
   global.WASM_PATH = chrome.runtime.getURL("");
 }
+
+// Set ATTESTOR_BASE_URL so ZK resource fetcher can find circuit files
+// served by the attestor-core server at /browser-rpc/resources/
+globalThis.ATTESTOR_BASE_URL = "http://localhost:8001";
 
 // Set appropriate COOP/COEP headers for SharedArrayBuffer support
 const metaCSP = document.createElement("meta");
@@ -140,8 +153,13 @@ class OffscreenProofGenerator {
               proof: proof,
             });
           } catch (error) {
+            const errMsg =
+              error?.message ||
+              (typeof error === "string" ? error : JSON.stringify(error)) ||
+              "Unknown error";
+            console.error("[DIAG-OFFSCREEN] GENERATE_PROOF catch:", errMsg, error);
             offscreenLogger.error({
-              message: "[OFFSCREEN] Error generating proof: " + error.message,
+              message: "[OFFSCREEN] Error generating proof: " + errMsg,
               logLevel: LOG_LEVEL.ERROR,
               type: LOG_TYPES.OFFSCREEN,
               eventType: EVENT_TYPES.PROOF_GENERATION_FAILED,
@@ -151,7 +169,7 @@ class OffscreenProofGenerator {
               source: MESSAGE_SOURCES.OFFSCREEN,
               target: MESSAGE_SOURCES.BACKGROUND,
               success: false,
-              error: error.message || "Unknown error in proof generation",
+              error: errMsg,
             });
           }
         })();
@@ -219,6 +237,10 @@ class OffscreenProofGenerator {
     delete claimData.sessionId;
 
     try {
+      console.log("[DIAG-OFFSCREEN] generateProof called, claimData keys:", Object.keys(claimData));
+      console.log("[DIAG-OFFSCREEN] claimData.name:", claimData.name);
+      console.log("[DIAG-OFFSCREEN] claimData.client:", JSON.stringify(claimData.client));
+
       offscreenLogger.info({
         message: "[OFFSCREEN] Updating session status to PROOF_GENERATION_STARTED",
         logLevel: LOG_LEVEL.INFO,
@@ -237,7 +259,10 @@ class OffscreenProofGenerator {
         }, 60000 * 2);
       });
 
-      const attestorPromise = await createClaimOnAttestor(claimData);
+      console.log("[DIAG-OFFSCREEN] calling createClaimOnAttestor...");
+      const createClaim = getCreateClaimOnAttestor();
+      const attestorPromise = await createClaim(claimData);
+      console.log("[DIAG-OFFSCREEN] createClaimOnAttestor returned, type:", typeof attestorPromise);
 
       offscreenLogger.info({
         message: "[OFFSCREEN] Attestor promise created",
@@ -247,6 +272,7 @@ class OffscreenProofGenerator {
       });
 
       const result = await Promise.race([attestorPromise, timeoutPromise]);
+      console.log("[DIAG-OFFSCREEN] result received:", JSON.stringify(result).substring(0, 500));
 
       result.publicData = typeof claimData.publicData === "string" ? claimData.publicData : null;
 
@@ -261,8 +287,13 @@ class OffscreenProofGenerator {
       await updateSessionStatus(sessionId, RECLAIM_SESSION_STATUS.PROOF_GENERATION_SUCCESS);
       return result;
     } catch (error) {
+      const errMsg = error?.message || (typeof error === "string" ? error : JSON.stringify(error));
+      console.error("[DIAG-OFFSCREEN] generateProof FAILED:", errMsg);
+      console.error("[DIAG-OFFSCREEN] error type:", typeof error);
+      console.error("[DIAG-OFFSCREEN] error stack:", error?.stack);
+      console.error("[DIAG-OFFSCREEN] full error:", error);
       offscreenLogger.error({
-        message: "[OFFSCREEN] Error generating proof: " + error?.message || "Unknown error",
+        message: "[OFFSCREEN] Error generating proof: " + errMsg,
         logLevel: LOG_LEVEL.ERROR,
         type: LOG_TYPES.OFFSCREEN,
         eventType: EVENT_TYPES.PROOF_GENERATION_FAILED,

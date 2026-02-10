@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reclaim Offscreen Document</title>
+    <!-- 1) Load snarkjs as a global (sets window.snarkjs) -->
+    <script src="./snarkjs.min.js"></script>
+    <!-- 2) Load pre-built attestor-core browser bundle (uses window.snarkjs internally) -->
+    <script type="module" src="./load-attestor.mjs"></script>
+    <!-- 3) Load webpack bundle (uses window.ReclaimAttestorCore) -->
     <script defer src="<%= scriptPath %>"></script>
   </head>
   <body>
     <div id="offscreen-container">
       <!-- This document is used for proof generation operations that require DOM access -->
     </div>
-    <!-- Let webpack inject the script automatically -->
   </body>
 </html>

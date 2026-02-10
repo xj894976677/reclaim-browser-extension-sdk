@@ -3,8 +3,10 @@ import { reclaimExtensionSDK } from '@joclaim/browser-extension-sdk';
 import './ReclaimDemo.css';
 
 const PROVIDERS = [
-  { id: 'binance-kyc-status-provider', name: 'Binance KYC Status' },
-  { id: '2b22db5c-78d9-4d82-84f0-a9e0a4ed0470', name: 'Provider 2b22db5c' },
+  { id: 'binance-kyc-status-provider', name: 'Binance KYC Status (ZK)' },
+  { id: '2b22db5c-78d9-4d82-84f0-a9e0a4ed0470', name: 'Binance KYC Status (Key-Update)' },
+  { id: 'binance-kyc-lite-zk', name: 'Binance KYC Lite (ZK)' },
+  { id: 'binance-kyc-lite-key-update', name: 'Binance KYC Lite (Key-Update)' },
 ];
 
 const APP_ID = import.meta.env.VITE_RECLAIM_APP_ID;

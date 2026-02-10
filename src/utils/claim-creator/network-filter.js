@@ -109,6 +109,11 @@ function matchesResponseCriteria(responseText, matchCriteria, parameters = {}) {
     return true;
   }
 
+  const isTarget =
+    responseText?.includes("current-kyc-status") ||
+    responseText?.includes("kycStatus") ||
+    responseText?.includes("fillInfo");
+
   for (const match of matchCriteria) {
     let pattern;
     if (match.type === "regex") {
@@ -120,6 +125,20 @@ function matchesResponseCriteria(responseText, matchCriteria, parameters = {}) {
     const matches = regex.test(responseText);
     // Check if match expectation is met
     const matchExpectation = match.invert ? !matches : matches;
+    if (isTarget) {
+      console.log(
+        "[DIAG-MATCH] pattern:",
+        match.value,
+        "→ regex:",
+        pattern,
+        "→ matched:",
+        matches,
+        "invert:",
+        match.invert,
+        "pass:",
+        matchExpectation,
+      );
+    }
     if (!matchExpectation) {
       return false;
     }
@@ -199,17 +218,41 @@ function matchesResponseFields(responseText, responseRedactions, contentLogger) 
 // Main filtering function
 export const filterRequest = (request, filterCriteria, parameters = {}, contentLogger) => {
   try {
+    // Targeted debug: log when URL contains the target pattern
+    const isTarget = request?.url?.includes("current-kyc-status");
+    if (isTarget) {
+      console.log("[DIAG-FILTER] Target request found:", request.url);
+      console.log("[DIAG-FILTER] method:", request.method, "expected:", filterCriteria.method);
+      console.log(
+        "[DIAG-FILTER] responseText exists:",
+        !!request.responseText,
+        "length:",
+        request.responseText?.length,
+      );
+      console.log("[DIAG-FILTER] responseText preview:", request.responseText?.substring(0, 200));
+    }
+
     // First check if request matches criteria
     if (!matchesRequestCriteria(request, filterCriteria, parameters)) {
+      if (isTarget) console.log("[DIAG-FILTER] FAILED at matchesRequestCriteria");
       return false;
     }
 
     // Then check if response matches (if we have response data)
+    if (isTarget) {
+      console.log(
+        "[DIAG-FILTER] has currentKycLevelStatus:",
+        request.responseText.includes("currentKycLevelStatus"),
+      );
+      console.log("[DIAG-FILTER] has kycSubStatus:", request.responseText.includes("kycSubStatus"));
+      console.log("[DIAG-FILTER] response (500 chars):", request.responseText.substring(0, 500));
+    }
     if (
       request.responseText &&
       filterCriteria.responseMatches &&
       !matchesResponseCriteria(request.responseText, filterCriteria.responseMatches, parameters)
     ) {
+      if (isTarget) console.log("[DIAG-FILTER] FAILED at matchesResponseCriteria");
       return false;
     }
 
@@ -219,9 +262,11 @@ export const filterRequest = (request, filterCriteria, parameters = {}, contentL
       filterCriteria.responseRedactions &&
       !matchesResponseFields(request.responseText, filterCriteria.responseRedactions, contentLogger)
     ) {
+      if (isTarget) console.log("[DIAG-FILTER] FAILED at matchesResponseFields");
       return false;
     }
 
+    if (isTarget) console.log("[DIAG-FILTER] ALL CHECKS PASSED!");
     return true;
   } catch (error) {
     contentLogger.error({
