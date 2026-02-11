@@ -43,18 +43,18 @@ async function main() {
   const publicDir = path.resolve(projectRoot, args["public-dir"] || "public");
 
   // 1) Download circuits into public/browser-rpc/resources
-  console.log("[reclaim] downloading circuits...");
+  console.log("[joclaim] downloading circuits...");
   const dlScript = path.join(sdkBuild, "scripts", "download-circuits.js");
   try {
     cp.execFileSync(process.execPath, [dlScript], { stdio: "inherit", cwd: projectRoot });
   } catch (e) {
-    console.error("[reclaim] circuits download failed", e.message);
+    console.error("[joclaim] circuits download failed", e.message);
     process.exit(1);
   }
 
-  // 2) Copy SDK assets into public/reclaim-browser-extension-sdk
-  console.log("[reclaim] copying assets...");
-  const targetBase = path.join(publicDir, "reclaim-browser-extension-sdk");
+  // 2) Copy SDK assets into public/joclaim-browser-extension-sdk
+  console.log("[joclaim] copying assets...");
+  const targetBase = path.join(publicDir, "joclaim-browser-extension-sdk");
 
   // content
   copyFile(
@@ -76,18 +76,18 @@ async function main() {
   const b343 = path.join(sdkBuild, "343.bundle.js");
   if (fs.existsSync(b343)) copyFile(b343, path.join(publicDir, "343.bundle.js"));
 
-  // 3) Copy SDK bundle into public/reclaim-browser-extension-sdk
+  // 3) Copy SDK bundle into public/joclaim-browser-extension-sdk
   copyFile(
-    path.join(sdkBuild, "ReclaimExtensionSDK.bundle.js"),
-    path.join(publicDir, "reclaim-browser-extension-sdk", "ReclaimExtensionSDK.bundle.js"),
+    path.join(sdkBuild, "JoclaimExtensionSDK.bundle.js"),
+    path.join(publicDir, "joclaim-browser-extension-sdk", "JoclaimExtensionSDK.bundle.js"),
   );
   // optionally also MV2
   // copyFile(path.join(sdkBuild, "ReclaimExtensionSDK-mv2.bundle.js"), path.join(publicDir, "reclaim-browser-extension-sdk", "ReclaimExtensionSDK-mv2.bundle.js"));
 
-  console.log("[reclaim] setup complete");
+  console.log("[joclaim] setup complete");
 }
 
 main().catch((e) => {
-  console.error("[reclaim] setup failed", e);
+  console.error("[joclaim] setup failed", e);
   process.exit(1);
 });

@@ -259,7 +259,7 @@ const backgroundEsmConfig = {
   devtool: isDevelopment ? "cheap-module-source-map" : "source-map",
   entry: {
     "background/background": { import: path.join(__dirname, "src", "background", "background.js") },
-    ReclaimExtensionSDK: {
+    JoclaimExtensionSDK: {
       import: path.join(__dirname, "src", "ReclaimExtensionSDK.js"),
       library: { type: "module" },
     },
@@ -299,7 +299,7 @@ const backgroundCommonJsConfig = {
     "background/background-mv2": {
       import: path.join(__dirname, "src", "background", "background.js"),
     },
-    "ReclaimExtensionSDK-mv2": {
+    "JoclaimExtensionSDK-mv2": {
       import: path.join(__dirname, "src", "ReclaimExtensionSDK.js"),
       library: { type: "commonjs2" },
     },

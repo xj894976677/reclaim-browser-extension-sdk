@@ -1,10 +1,10 @@
 {
   "name": "@joclaim/browser-extension-sdk",
-  "version": "0.1.0",
-  "module": "build/ReclaimExtensionSDK.bundle.js",
+  "version": "0.2.0",
+  "module": "build/JoclaimExtensionSDK.bundle.js",
   "exports": {
     ".": {
-      "import": "./build/ReclaimExtensionSDK.bundle.js",
+      "import": "./build/JoclaimExtensionSDK.bundle.js",
       "types": "./index.d.ts"
     },
     "./background": "./build/background/background.bundle.js",
@@ -29,7 +29,8 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "joclaim",
+    "reclaimprotocol",
+    "reclaim",
     "sdk",
     "browser-extension-sdk",
     "browser-extension",
@@ -58,8 +59,8 @@
   "license": "MIT",
   "dependencies": {
     "@extism/extism": "^1.0.3",
-    "@joclaim/attestor-core": "0.1.0",
-    "@joclaim/tls": "0.1.0",
+    "@joclaim/attestor-core": "0.2.1",
+    "@joclaim/tls": "0.2.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "child_process": "^1.0.2",

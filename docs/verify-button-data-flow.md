@@ -149,16 +149,16 @@ sequenceDiagram
 
 ## API Endpoints Summary
 
-| Endpoint | Method | Purpose | Caller → Server |
-|---|---|---|---|
-| `/api/sdk/init/session/` | POST | Create new verification session | SDK → Attestor |
-| `/api/sdk/update/session/` | POST | Update session status | Background/Offscreen → Attestor |
-| `/api/sdk/session/:id` | GET | Get session data | SDK → Attestor |
-| `/api/providers/:id` | GET | Fetch provider configuration | Background → Attestor |
-| `/api/providers/:id/custom-injection` | GET | Get provider's custom injection script | Background → Attestor |
-| `/session/:id/proof` | POST | Submit generated proof | Background → Attestor |
-| `/api/logs` | POST | SDK log dump endpoint | SDK → Attestor |
-| `wss://.../ws` | WebSocket | TLS proxy attestation tunnel | Offscreen → Attestor |
+| Endpoint                              | Method    | Purpose                                | Caller → Server                 |
+| ------------------------------------- | --------- | -------------------------------------- | ------------------------------- |
+| `/api/sdk/init/session/`              | POST      | Create new verification session        | SDK → Attestor                  |
+| `/api/sdk/update/session/`            | POST      | Update session status                  | Background/Offscreen → Attestor |
+| `/api/sdk/session/:id`                | GET       | Get session data                       | SDK → Attestor                  |
+| `/api/providers/:id`                  | GET       | Fetch provider configuration           | Background → Attestor           |
+| `/api/providers/:id/custom-injection` | GET       | Get provider's custom injection script | Background → Attestor           |
+| `/session/:id/proof`                  | POST      | Submit generated proof                 | Background → Attestor           |
+| `/api/logs`                           | POST      | SDK log dump endpoint                  | SDK → Attestor                  |
+| `wss://.../ws`                        | WebSocket | TLS proxy attestation tunnel           | Offscreen → Attestor            |
 
 ---
 
@@ -181,23 +181,23 @@ stateDiagram-v2
 
 ## Key Component Responsibilities
 
-| Component | Location | Role |
-|---|---|---|
-| **ReclaimDemo.jsx** | `examples/web-app/src/` | UI entry point, calls SDK |
-| **ReclaimExtensionSDK.js** | `src/` | SDK library: init session, manage events |
-| **Content Script** | `src/content/content.js` | Bridge between web page ↔ extension; intercepts network traffic |
-| **Network Interceptor** | `src/interceptor/` | Injected into provider page to capture fetch/XHR |
-| **Background Script** | `src/background/background.js` | Central orchestrator: routes messages, manages state |
-| **Session Manager** | `src/background/sessionManager.js` | Handles session lifecycle, proof submission |
-| **Message Router** | `src/background/messageRouter.js` | Dispatches messages to handlers |
-| **Claim Creator** | `src/utils/claim-creator/` | Builds claim object from intercepted data |
-| **Proof Queue** | `src/background/proofQueue.js` | Sequential proof generation queue |
-| **Proof Generator** | `src/utils/proof-generator/` | Manages offscreen document for proof gen |
-| **Offscreen Document** | `src/offscreen/offscreen.js` | Runs `createClaimOnAttestor()`, private key gen |
-| **create-server.ts** | `attestor-core/src/server/` | HTTP + WebSocket server setup |
-| **session-api.ts** | `attestor-core/src/server/` | Session CRUD endpoints |
-| **provider-api.ts** | `attestor-core/src/server/` | Provider config endpoints |
-| **socket.ts** | `attestor-core/src/server/` | WebSocket RPC handler for TLS attestation |
+| Component                  | Location                           | Role                                                             |
+| -------------------------- | ---------------------------------- | ---------------------------------------------------------------- |
+| **ReclaimDemo.jsx**        | `examples/web-app/src/`            | UI entry point, calls SDK                                        |
+| **ReclaimExtensionSDK.js** | `src/`                             | SDK library: init session, manage events                         |
+| **Content Script**         | `src/content/content.js`           | Bridge between web page ↔ extension; intercepts network traffic |
+| **Network Interceptor**    | `src/interceptor/`                 | Injected into provider page to capture fetch/XHR                 |
+| **Background Script**      | `src/background/background.js`     | Central orchestrator: routes messages, manages state             |
+| **Session Manager**        | `src/background/sessionManager.js` | Handles session lifecycle, proof submission                      |
+| **Message Router**         | `src/background/messageRouter.js`  | Dispatches messages to handlers                                  |
+| **Claim Creator**          | `src/utils/claim-creator/`         | Builds claim object from intercepted data                        |
+| **Proof Queue**            | `src/background/proofQueue.js`     | Sequential proof generation queue                                |
+| **Proof Generator**        | `src/utils/proof-generator/`       | Manages offscreen document for proof gen                         |
+| **Offscreen Document**     | `src/offscreen/offscreen.js`       | Runs `createClaimOnAttestor()`, private key gen                  |
+| **create-server.ts**       | `attestor-core/src/server/`        | HTTP + WebSocket server setup                                    |
+| **session-api.ts**         | `attestor-core/src/server/`        | Session CRUD endpoints                                           |
+| **provider-api.ts**        | `attestor-core/src/server/`        | Provider config endpoints                                        |
+| **socket.ts**              | `attestor-core/src/server/`        | WebSocket RPC handler for TLS attestation                        |
 
 ---
 
@@ -237,6 +237,7 @@ graph LR
 ## Data Structures
 
 ### Claim Object (created by `createClaimObject()`)
+
 ```json
 {
   "infoHash": "<keccak256 hash>",
@@ -244,8 +245,8 @@ graph LR
   "provider": "<providerId>",
   "timestampS": 1706000000,
   "context": "{\"contextAddress\":\"0x0\",\"contextMessage\":\"\"}",
-  "parameters": {"paramName": "value"},
-  "secretParams": {"cookieName": "cookieValue", "authToken": "..."},
+  "parameters": { "paramName": "value" },
+  "secretParams": { "cookieName": "cookieValue", "authToken": "..." },
   "ownerPrivateKey": "0x...",
   "sessionId": "session-uuid",
   "publicData": "{\"extractedParam\":\"value\"}"
@@ -253,12 +254,13 @@ graph LR
 ```
 
 ### Proof Result (returned from attestor)
+
 ```json
 {
   "identifier": "<claim hash>",
   "claimData": { "provider": "...", "parameters": "...", "owner": "..." },
   "signatures": ["<attestor signature>"],
-  "witnesses": [{"id": "...", "url": "wss://..."}],
+  "witnesses": [{ "id": "...", "url": "wss://..." }],
   "publicData": "..."
 }
 ```

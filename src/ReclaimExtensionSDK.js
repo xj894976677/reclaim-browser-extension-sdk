@@ -455,6 +455,6 @@ class ReclaimExtensionSDK {
   }
 }
 
-export const reclaimExtensionSDK = new ReclaimExtensionSDK();
+export const joclaimExtensionSDK = new ReclaimExtensionSDK();
 export { ReclaimExtensionProofRequest };
 export default ReclaimExtensionSDK;

@@ -10,7 +10,7 @@ export interface Proofs {
 
 export type RequestEvents = "started" | "completed" | "error" | "progress";
 
-export class ReclaimExtensionProofRequest {
+export class JoclaimExtensionProofRequest {
   applicationId: string;
   providerId: string;
   sessionId: string;
@@ -21,11 +21,11 @@ export class ReclaimExtensionProofRequest {
   static fromJsonString(
     json: string | Record<string, unknown>,
     options?: InitOptions,
-  ): ReclaimExtensionProofRequest;
+  ): JoclaimExtensionProofRequest;
   static fromConfig(
     config: Record<string, unknown>,
     options?: InitOptions,
-  ): ReclaimExtensionProofRequest;
+  ): JoclaimExtensionProofRequest;
 
   setAppCallbackUrl(url: string, jsonProofResponse?: boolean): void;
   setRedirectUrl(url: string): void;
@@ -39,7 +39,7 @@ export class ReclaimExtensionProofRequest {
   cancel(timeoutMs?: number): Promise<boolean | void>;
 }
 
-export class ReclaimExtensionSDK {
+export class JoclaimExtensionSDK {
   initializeBackground(): unknown;
   isExtensionInstalled(opts?: { extensionID?: string; timeout?: number }): Promise<boolean>;
   getVersion(): string;
@@ -48,14 +48,14 @@ export class ReclaimExtensionSDK {
     appSecret: string,
     providerId: string,
     options?: InitOptions,
-  ): Promise<ReclaimExtensionProofRequest>;
+  ): Promise<JoclaimExtensionProofRequest>;
 
-  // Convenience wrapper that forwards to ReclaimExtensionProofRequest.fromJsonString
+  // Convenience wrapper that forwards to JoclaimExtensionProofRequest.fromJsonString
   fromJsonString(
     json: string | Record<string, unknown>,
     options?: InitOptions,
-  ): ReclaimExtensionProofRequest;
+  ): JoclaimExtensionProofRequest;
 }
 
-export const reclaimExtensionSDK: ReclaimExtensionSDK;
-export default ReclaimExtensionSDK;
+export const joclaimExtensionSDK: JoclaimExtensionSDK;
+export default JoclaimExtensionSDK;

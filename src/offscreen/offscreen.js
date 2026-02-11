@@ -1,5 +1,9 @@
 // Import necessary utilities and interfaces
 import "../utils/polyfills";
+import { setCryptoImplementation } from "@joclaim/tls";
+import { webcryptoCrypto } from "@joclaim/tls/webcrypto";
+setCryptoImplementation(webcryptoCrypto);
+
 import { MESSAGE_ACTIONS, MESSAGE_SOURCES, RECLAIM_SESSION_STATUS } from "../utils/constants";
 import { createClaimOnAttestor } from "@joclaim/attestor-core";
 // Import our specialized WebSocket implementation for offscreen document
