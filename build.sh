@@ -50,7 +50,7 @@ if [ ! -f ".env" ]; then
   cp .env.example .env
   sed -i '' 's|^VITE_RECLAIM_APP_ID=.*|VITE_RECLAIM_APP_ID=0x79A46bc98aAb77FDA01F0fFdB5D806E1e0A485dc|' .env
   sed -i '' 's|^VITE_RECLAIM_APP_SECRET=.*|VITE_RECLAIM_APP_SECRET=0x231056ae611c9c2bab06ae6d46f85335c7a23912a2d3b66e5de244a94b1491cc|' .env
-  sed -i '' 's|^VITE_RECLAIM_EXTENSION_ID=.*|VITE_RECLAIM_EXTENSION_ID=elmologhmcjpdalmdhlopllajilfodef|' .env
+  sed -i '' 's|^VITE_RECLAIM_EXTENSION_ID=.*|VITE_RECLAIM_EXTENSION_ID=emdoloppalidgolapfeeieleddikmcha|' .env
   echo ".env 已生成"
 fi
 npm install

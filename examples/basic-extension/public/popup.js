@@ -24,14 +24,14 @@ document.getElementById("startBtn").addEventListener("click", async () => {
     }
 
     request = await reclaimExtensionSDK.init(appId, appSecret, providerId, {
-      extensionID: "elmologhmcjpdalmdhlopllajilfodef",
+      extensionID: "emdoloppalidgolapfeeieleddikmcha",
     });
 
     console.log("[popup] request", request);
     if (callbackUrl) {
       request.setAppCallbackUrl(callbackUrl);
     }
-    
+
     request.setParams({ demo: "1" });
     request.addContext("0x0", "popup demo");
 
