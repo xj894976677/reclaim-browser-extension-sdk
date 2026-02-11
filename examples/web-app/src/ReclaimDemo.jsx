@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { reclaimExtensionSDK } from '@reclaimprotocol/browser-extension-sdk';
+import { reclaimExtensionSDK } from '@joclaim/browser-extension-sdk';
 import './ReclaimDemo.css';
 
 const PROVIDERS = [
+  { id: 'binance-kyc-lite-key-update', name: 'binance-kyc-lite-key-update' },
   { id: 'binance-kyc-lite-zk', name: 'binance-kyc-lite-zk' },
   { id: '2b22db5c-78d9-4d82-84f0-a9e0a4ed0470', name: 'Provider 2b22db5c' },
 ];

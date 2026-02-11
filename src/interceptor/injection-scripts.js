@@ -103,7 +103,7 @@ try {
   "use strict";
 
   // Backend API configuration
-  const BACKEND_URL = "https://api.reclaimprotocol.org";
+  const BACKEND_URL = process.env.BACKEND_URL || "";
   const PROVIDER_API_ENDPOINT = (providerId) =>
     `${BACKEND_URL}/api/providers/${providerId}/custom-injection`;
 
