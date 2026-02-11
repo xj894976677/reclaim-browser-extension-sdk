@@ -60,7 +60,7 @@
   "dependencies": {
     "@extism/extism": "^1.0.3",
     "@reclaimprotocol/attestor-core": "4.0.3",
-    "@reclaimprotocol/tls": "git+https://git@github.com/reclaimprotocol/tls.git#8e0669a220341432673a20bb51f9339555701ef4",
+    "@joclaim/tls": "0.1.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "child_process": "^1.0.2",
@@ -79,7 +79,7 @@
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
-    "snarkjs": "^0.7.5",
+    "@joclaim/snarkjs": "0.1.0",
     "stream-browserify": "^3.0.0",
     "tailwindcss": "^3.3.3",
     "web-vitals": "^2.1.4",

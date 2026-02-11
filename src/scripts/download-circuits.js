@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-const REPO = "reclaimprotocol/zk-symmetric-crypto";
+const REPO = "xj894976677/zk-symmetric-crypto";
 const TARGET_DIR = path.join(process.cwd(), "public", "browser-rpc", "resources");
 const TEMP_DIR = path.join(process.cwd(), "zk-resources");
 
@@ -11,7 +11,7 @@ const TEMP_DIR = path.join(process.cwd(), "zk-resources");
  */
 function getLatestCommitHash() {
   return new Promise((resolve, reject) => {
-    const url = `https://api.github.com/repos/${REPO}/commits/HEAD`;
+    const url = `https://api.github.com/repos/${REPO}/commits/test`;
     const req = https.get(
       url,
       {
