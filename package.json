@@ -1,6 +1,6 @@
 {
   "name": "@joclaim/browser-extension-sdk",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "module": "build/JoclaimExtensionSDK.bundle.js",
   "exports": {
     ".": {
@@ -59,7 +59,7 @@
   "license": "MIT",
   "dependencies": {
     "@extism/extism": "^1.0.3",
-    "@joclaim/attestor-core": "0.2.1",
+    "@joclaim/attestor-core": "0.3.0",
     "@joclaim/tls": "0.2.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
