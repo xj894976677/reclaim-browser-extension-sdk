@@ -82,7 +82,7 @@ setupOffscreenReadyListener();
 
 async function createOffscreenDocumentInternal() {
   const offscreenUrl = chrome.runtime.getURL(
-    "reclaim-browser-extension-sdk/offscreen/offscreen.html",
+    "joclaim-browser-extension-sdk/offscreen/offscreen.html",
   );
   offscreenLogger.info({
     message: "[OFFSCREEN-MANAGER] Attempting to create offscreen document with URL:",

@@ -44,7 +44,7 @@ export function createProviderVerificationPopup(
 
     try {
       const cssUrl = chrome.runtime.getURL(
-        "reclaim-browser-extension-sdk/content/components/reclaim-provider-verification-popup.css",
+        "joclaim-browser-extension-sdk/content/components/reclaim-provider-verification-popup.css",
       );
       const response = await fetch(cssUrl);
       const cssText = await response.text();
@@ -75,7 +75,7 @@ export function createProviderVerificationPopup(
   async function loadHTMLTemplate() {
     try {
       const htmlUrl = chrome.runtime.getURL(
-        "reclaim-browser-extension-sdk/content/components/reclaim-provider-verification-popup.html",
+        "joclaim-browser-extension-sdk/content/components/reclaim-provider-verification-popup.html",
       );
       const response = await fetch(htmlUrl);
       const htmlText = await response.text();

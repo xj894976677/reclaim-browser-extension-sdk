@@ -26,7 +26,7 @@ const injectNetworkInterceptor = function () {
   try {
     const script = document.createElement("script");
     const src = chrome.runtime.getURL(
-      "reclaim-browser-extension-sdk/interceptor/network-interceptor.bundle.js",
+      "joclaim-browser-extension-sdk/interceptor/network-interceptor.bundle.js",
     );
     script.src = src;
     script.type = "text/javascript";
@@ -89,7 +89,7 @@ const injectDynamicInjectionScript = function () {
   try {
     const script = document.createElement("script");
     script.src = chrome.runtime.getURL(
-      "reclaim-browser-extension-sdk/interceptor/injection-scripts.bundle.js",
+      "joclaim-browser-extension-sdk/interceptor/injection-scripts.bundle.js",
     );
     script.type = "text/javascript";
 

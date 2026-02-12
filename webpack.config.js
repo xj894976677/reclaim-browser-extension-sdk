@@ -66,6 +66,20 @@ const commonRules = [
 const commonResolve = {
   alias: {
     ...alias,
+    // Force all @joclaim/tls imports to resolve to a single copy (ESM exports-aware)
+    "@joclaim/tls$": path.resolve(__dirname, "node_modules/@joclaim/tls/lib/index.js"),
+    "@joclaim/tls/webcrypto": path.resolve(
+      __dirname,
+      "node_modules/@joclaim/tls/lib/crypto/webcrypto.js",
+    ),
+    "@joclaim/tls/purejs-crypto": path.resolve(
+      __dirname,
+      "node_modules/@joclaim/tls/lib/crypto/pure-js.js",
+    ),
+    // zk-symmetric-crypto imports bare 'snarkjs', map to @joclaim/snarkjs
+    snarkjs: path.resolve(__dirname, "node_modules/@joclaim/snarkjs/build/browser.esm.js"),
+    // fastfile is a Node.js FS utility used by snarkjs, not needed in browser
+    fastfile: false,
     koffi: false,
     re2: false,
     worker_threads: path.resolve(__dirname, "src/utils/mocks/worker-threads-mock.js"),

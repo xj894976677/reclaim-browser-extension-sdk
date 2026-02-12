@@ -346,6 +346,11 @@ export const createClaimObject = async (
     params.additionalClientOptions = providerData.additionalClientOptions;
   }
 
+  // Pass writeRedactionMode so attestor-core uses the correct proof mode (zk vs key-update)
+  if (providerData.writeRedactionMode) {
+    params.writeRedactionMode = providerData.writeRedactionMode;
+  }
+
   let ownerPrivateKey;
   try {
     ownerPrivateKey = await getPrivateKeyFromOffscreen(sessionId, providerId, bgLogger);

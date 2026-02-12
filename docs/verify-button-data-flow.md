@@ -181,23 +181,23 @@ stateDiagram-v2
 
 ## Key Component Responsibilities
 
-| Component                  | Location                           | Role                                                             |
-| -------------------------- | ---------------------------------- | ---------------------------------------------------------------- |
-| **ReclaimDemo.jsx**        | `examples/web-app/src/`            | UI entry point, calls SDK                                        |
-| **ReclaimExtensionSDK.js** | `src/`                             | SDK library: init session, manage events                         |
+| Component                  | Location                           | Role                                                            |
+| -------------------------- | ---------------------------------- | --------------------------------------------------------------- |
+| **ReclaimDemo.jsx**        | `examples/web-app/src/`            | UI entry point, calls SDK                                       |
+| **ReclaimExtensionSDK.js** | `src/`                             | SDK library: init session, manage events                        |
 | **Content Script**         | `src/content/content.js`           | Bridge between web page ↔ extension; intercepts network traffic |
-| **Network Interceptor**    | `src/interceptor/`                 | Injected into provider page to capture fetch/XHR                 |
-| **Background Script**      | `src/background/background.js`     | Central orchestrator: routes messages, manages state             |
-| **Session Manager**        | `src/background/sessionManager.js` | Handles session lifecycle, proof submission                      |
-| **Message Router**         | `src/background/messageRouter.js`  | Dispatches messages to handlers                                  |
-| **Claim Creator**          | `src/utils/claim-creator/`         | Builds claim object from intercepted data                        |
-| **Proof Queue**            | `src/background/proofQueue.js`     | Sequential proof generation queue                                |
-| **Proof Generator**        | `src/utils/proof-generator/`       | Manages offscreen document for proof gen                         |
-| **Offscreen Document**     | `src/offscreen/offscreen.js`       | Runs `createClaimOnAttestor()`, private key gen                  |
-| **create-server.ts**       | `attestor-core/src/server/`        | HTTP + WebSocket server setup                                    |
-| **session-api.ts**         | `attestor-core/src/server/`        | Session CRUD endpoints                                           |
-| **provider-api.ts**        | `attestor-core/src/server/`        | Provider config endpoints                                        |
-| **socket.ts**              | `attestor-core/src/server/`        | WebSocket RPC handler for TLS attestation                        |
+| **Network Interceptor**    | `src/interceptor/`                 | Injected into provider page to capture fetch/XHR                |
+| **Background Script**      | `src/background/background.js`     | Central orchestrator: routes messages, manages state            |
+| **Session Manager**        | `src/background/sessionManager.js` | Handles session lifecycle, proof submission                     |
+| **Message Router**         | `src/background/messageRouter.js`  | Dispatches messages to handlers                                 |
+| **Claim Creator**          | `src/utils/claim-creator/`         | Builds claim object from intercepted data                       |
+| **Proof Queue**            | `src/background/proofQueue.js`     | Sequential proof generation queue                               |
+| **Proof Generator**        | `src/utils/proof-generator/`       | Manages offscreen document for proof gen                        |
+| **Offscreen Document**     | `src/offscreen/offscreen.js`       | Runs `createClaimOnAttestor()`, private key gen                 |
+| **create-server.ts**       | `attestor-core/src/server/`        | HTTP + WebSocket server setup                                   |
+| **session-api.ts**         | `attestor-core/src/server/`        | Session CRUD endpoints                                          |
+| **provider-api.ts**        | `attestor-core/src/server/`        | Provider config endpoints                                       |
+| **socket.ts**              | `attestor-core/src/server/`        | WebSocket RPC handler for TLS attestation                       |
 
 ---
 
