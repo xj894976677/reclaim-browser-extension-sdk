@@ -76,12 +76,15 @@ const commonResolve = {
       __dirname,
       "node_modules/@joclaim/tls/lib/crypto/pure-js.js",
     ),
-    // zk-symmetric-crypto imports bare 'snarkjs', map to @joclaim/snarkjs
-    snarkjs: path.resolve(__dirname, "node_modules/@joclaim/snarkjs/build/browser.esm.js"),
+    // zk-symmetric-crypto imports bare 'snarkjs', map to official snarkjs browser build
+    snarkjs: path.resolve(__dirname, "node_modules/snarkjs/build/browser.esm.js"),
     // fastfile is a Node.js FS utility used by snarkjs, not needed in browser
     fastfile: false,
     koffi: false,
-    re2: false,
+    re2: path.resolve(
+      __dirname,
+      "node_modules/@joclaim/attestor-core/lib/scripts/fallbacks/re2.js",
+    ),
     worker_threads: path.resolve(__dirname, "src/utils/mocks/worker-threads-mock.js"),
     "node:url": require.resolve("url/"),
     "react-native-tcp-socket": false,
@@ -112,7 +115,10 @@ const commonResolve = {
     worker_threads: false,
     readline: false,
     koffi: false,
-    re2: false,
+    re2: path.resolve(
+      __dirname,
+      "node_modules/@joclaim/attestor-core/lib/scripts/fallbacks/re2.js",
+    ),
   },
 };
 

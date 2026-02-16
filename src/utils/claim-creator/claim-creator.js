@@ -295,7 +295,9 @@ export const createClaimObject = async (
   }
 
   // Process response redactions if available
-  if (providerData.responseRedactions) {
+  // In key-update mode, skip passing responseRedactions to attestor-core
+  // so server response blocks use directReveal instead of ZK proofs
+  if (providerData.responseRedactions && providerData.writeRedactionMode !== "key-update") {
     params.responseRedactions = providerData.responseRedactions.map((redaction) => {
       // Create a new object without hash field and empty jsonPath/xPath
       const cleanedRedaction = {};
